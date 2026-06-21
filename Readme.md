@@ -52,12 +52,12 @@ Taro di folder yang sama dengan `tropical_client.py`:
 - `username` / `password`: akun gateway lo (buat login + auto re-login). Pilih sendiri pas register.
 - `mode_execute`: `loop_wallet` (disarankan, hemat) atau `node`.
 - `PARTY_ID`: alamat wallet lo (format `xxxx::1220yyyy`).
-- `private_key_loop`: private key wallet lo (64 hex). **JANGAN kasih siapa-siapa.**
+- `private_key_loop`: private key wallet lo (64 hex). **JANGAN kasih siapa-siapa.** Tool pakai ini buat: (a) generate public key otomatis pas register, (b) sign transaksi di device. Private-nya gak pernah dikirim.
 - `loop_bearer` / `loop_bearer_pendek` / `ws_ticket` / `USER_ID`: token dari cantonloop (buat ambil saldo + execute via Loop).
 
 ---
 
-## 3. ONBOARDING (daftar ke node)
+## 3. ONBOARDING (daftar ke gateway)
 
 ### Langkah 1 - Register
 ```bash
@@ -67,13 +67,26 @@ Contoh:
 ```bash
 python tropical_client.py register X3Ur80AqiHU namamu passwordku123
 ```
-Output: `Register OK. Minta admin approve, terus login.`
+Output:
+```
+[*] generate public key (private GAK dikirim): fp=1220...
+register: 200 ...
+Register OK. Minta admin approve, terus login.
+```
 -> status lo **pending**.
+
+**Soal public key:** lo GAK perlu generate public key manual. Waktu `register`, tool OTOMATIS:
+1. Hitung public key dari `private_key_loop` di config lo.
+2. Kirim public key itu ke server (cuma PUBLIC, private tetap di device).
+
+Jadi pastiin `private_key_loop` di config udah bener SEBELUM register. Itu doang. Tool yang urus public key-nya.
 
 ### Langkah 2 - Tunggu admin approve
 Kasih tau admin username lo. Admin bakal:
-- Boarding public key lo ke node
-- Aktifin akun lo
+- Ambil public key lo (yang udah kekirim waktu register) lalu upload ke node.
+- Aktifin akun lo.
+
+Lo gak ngapa-ngapain di langkah ini, tinggal nunggu admin bilang "udah aktif".
 
 ### Langkah 3 - Login
 ```bash
@@ -179,5 +192,5 @@ python tropical_client.py login
 python tropical_client.py whoami
 python tropical_client.py balance
 python tropical_client.py deposit 100 USDA
-python tropical_client.py send CBTC 0.001 <wallet_tujuan>
+python tropical_client.py send CBTC 0.001 <wallet_temen>
 ```
