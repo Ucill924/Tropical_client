@@ -72,7 +72,7 @@ Output: `Register OK. Minta admin approve, terus login.`
 
 ### Langkah 2 - Tunggu admin approve
 Kasih tau admin username lo. Admin bakal:
-- Upload public key lo ke node (public key, BUKAN private)
+- Boarding public key lo ke node
 - Aktifin akun lo
 
 ### Langkah 3 - Login
